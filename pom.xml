@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>com.github.shivam1608</groupId>
 			<artifactId>JMailTM</artifactId>
-			<version>0.3</version>
+			<version>0.4</version>
 		</dependency>
 	</dependencies>
 </project>
