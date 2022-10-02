@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import me.shivzee.callbacks.MessageFetchedCallback;
@@ -94,22 +95,33 @@ public abstract class Command {
 				},
 				new Command() { // login
 
-					//TODO : .autologin
 					@Override
 					public void run(String[] args) throws Exception {
-						if(args.length != 2) {
+						
+						String email, password;
+						if (args.length == 0) {
+							Scanner sc = new Scanner(new File("." + File.separator + "autologin.txt"));
+							email = sc.nextLine();
+							password = sc.nextLine();
+						} else if (args.length == 2) {
+							email = args[0];
+							password = args[1];
+						} else {
 							invalidArgs();
 							return;
 						}
-						mailer = JMailBuilder.login(args[0] , args[1]);
+						
+						mailer = JMailBuilder.login(email, password);
 						mailer.init();
 						System.out.println("logged in to : " + mailer.getSelf().getEmail());
 					}
 
 					@Override
 					public String getUsage() {
-						return "login <email> <password>\n" +
-									"\tLogin to existing account";
+						return "login [<email> <password>]\n" +
+									"\tLogin to existing account\n" +
+									"\tIf no option given, find \"autologin.txt\" in working directory.\n" +
+									"\tYou can write your email & pasword there to login.";
 					}
 					
 					@Override
