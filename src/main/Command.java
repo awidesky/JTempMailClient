@@ -162,9 +162,8 @@ public abstract class Command {
 							return;
 						}
 						
-						mailer.delete(status->{ //TODO : asynchronous
-							   if(status) System.out.println("Account is Deleted");
-							});
+						if (mailer.deleteSync()) System.out.println("Account is Deleted");
+						
 					}
 
 					@Override
@@ -345,7 +344,6 @@ public abstract class Command {
 				},
 				new Command() { // getattat
 
-					//TODO : asynchronous
 					private String path = "." + File.separator;
 
 					@Override
@@ -366,9 +364,7 @@ public abstract class Command {
 						for(Message m : msgList) {
 							if(id.equals(m.getId())) {
 								m.getAttachments().forEach(attat -> {
-									attat.save(getPath(), attat.getFilename(), status -> {
-										if (status) System.out.println(attat.getFilename() + " is Downloaded");
-									});
+									if (attat.saveSync(getPath(), attat.getFilename())) System.out.println(attat.getFilename() + " is Downloaded");
 								});
 								return;
 							}
