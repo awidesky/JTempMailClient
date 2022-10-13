@@ -18,12 +18,28 @@ import me.shivzee.util.Response;
 
 public abstract class Command {
 	
+	private String commandStr;
+	public static HashMap<String, Command> cmdMap = null;
 	
+
 	protected abstract void run(String[] args) throws Exception;
 	public abstract String getUsage();
-	
-	public static HashMap<String, Command> cmdMap = null;
 
+	public Command(String commandString) {
+		this.commandStr = commandString;
+	}
+	@Override
+	public boolean equals(Object other) {
+		if (other == this || commandStr.equals(other.toString()))
+			return true;
+		else
+			return false;
+	}
+	@Override
+	public String toString() {
+		return commandStr;
+	}
+	
 	
 	public void exec(String[] args) {
 		try {
@@ -56,7 +72,7 @@ public abstract class Command {
 	public static void init() {
 		cmdMap = new LinkedHashMap<String, Command>();
 
-		cmdMap.put("help", new Command() { // help
+		cmdMap.put("help", new Command("help") {
 
 			@Override
 			public void run(String[] args) throws Exception {
@@ -79,18 +95,9 @@ public abstract class Command {
 				return "help [command]\n" + "\tGet usage of certain command.\n"
 						+ "\tIf no argument is given, print help of all command.";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "help".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
 
-		cmdMap.put("login", new Command() { // login
+		cmdMap.put("login", new Command("login") {
 
 			@Override
 			public void run(String[] args) throws Exception {
@@ -119,17 +126,8 @@ public abstract class Command {
 						+ "\tIf no option given, find \"autologin.txt\" in working directory.\n"
 						+ "\tYou can write your email & pasword there to login.";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "login".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
-		cmdMap.put("gen", new Command() { // gen
+		cmdMap.put("gen", new Command("gen") {
 
 			@Override
 			public void run(String[] args) throws Exception {
@@ -155,17 +153,8 @@ public abstract class Command {
 						+ "\tGenerate new email combined with given id(optional) and random domain.\n"
 						+ "\tIf id is not given, random id will be used.";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "gen".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
-		cmdMap.put("delaccount", new Command() { // delaccount
+		cmdMap.put("delaccount", new Command("delaccount") {
 
 			@Override
 			public void run(String[] args) throws Exception {
@@ -183,17 +172,8 @@ public abstract class Command {
 			public String getUsage() {
 				return "delaccount\n" + "\tDelete self account.";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "delaccount".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
-		cmdMap.put("fetch", new Command() { // fetch
+		cmdMap.put("fetch", new Command("fetch") {
 
 			private boolean overwrite = false;
 
@@ -271,17 +251,8 @@ public abstract class Command {
 						+ "\twill be overwrited to fresh fetched message\n"
 						+ "\tIf limit is given, up to <limit> messages will be fetched";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "fetch".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
-		cmdMap.put("listmsg", new Command() { // listmsg
+		cmdMap.put("listmsg", new Command("listmsg") {
 
 			@Override
 			public void run(String[] args) throws Exception {
@@ -302,17 +273,8 @@ public abstract class Command {
 			public String getUsage() {
 				return "listmsg\n" + "\tList all fetched message.";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "listmsg".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
-		cmdMap.put("showmsg", new Command() { // showmsg
+		cmdMap.put("showmsg", new Command("showmsg") {
 
 			@Override
 			public void run(String[] args) throws Exception {
@@ -352,17 +314,8 @@ public abstract class Command {
 				return "showmsg [id]\n" + "\tShow message that have given id.\n"
 						+ "\tIf id is not given, show ALL message.";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "showmsg".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
-		cmdMap.put("getattat", new Command() { // getattat
+		cmdMap.put("getattat", new Command("getattat") {
 
 			private String path = "." + File.separator;
 
@@ -403,17 +356,8 @@ public abstract class Command {
 						+ "\tElse, files will be downloaded at working directory (" + new File(".").getAbsolutePath()
 						+ ")";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "getattat".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
-		cmdMap.put("exit", new Command() { // exit
+		cmdMap.put("exit", new Command("exit") {
 
 			@Override
 			public void run(String[] args) throws Exception {
@@ -423,25 +367,16 @@ public abstract class Command {
 			public String getUsage() {
 				return "exit\n" + "\tKills the application.";
 			}
-
-			@Override
-			public boolean equals(Object o) {
-				if (o == this || "exit".equals(o))
-					return true;
-				else
-					return false;
-			}
-
 		});
 	}
 	
 	
 	static class NULLCMD extends Command {
 
-		private String str;
+		public NULLCMD(String commandString) {
+			super(commandString);
+		}
 
-		public NULLCMD(String cmd) { this.str = cmd; }
-		
 		@Override
 		protected void run(String[] args) throws Exception {
 			System.err.println(getUsage());
@@ -450,7 +385,7 @@ public abstract class Command {
 
 		@Override
 		public String getUsage() {
-			return "Invalid command : " + str;
+			return "Invalid command : " + toString();
 		}
 		
 	};
