@@ -4,7 +4,6 @@ import static main.Main.mailer;
 import static main.Main.msgList;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -389,7 +388,7 @@ public abstract class Command {
 						return "getattat <id> [--path path]\n"
 								+"\tDownload attatchment of mail that have given id.\n"
 								+"\tIf path is given, the file(s) are stored in there.\n"
-								+"\tElse, files will be downloaded at working directory (" + Paths.get(".").toFile().getAbsolutePath() + ")";
+								+"\tElse, files will be downloaded at working directory (" + new File(".").getAbsolutePath() + ")";
 					}
 					
 					@Override
