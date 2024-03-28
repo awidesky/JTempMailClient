@@ -163,7 +163,7 @@ public abstract class Command {
 					return;
 				}
 
-				if (mailer.deleteSync())
+				if (mailer.delete())
 					System.out.println("Account is Deleted");
 
 			}
