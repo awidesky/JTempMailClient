@@ -163,7 +163,7 @@ public abstract class Command {
 					return;
 				}
 
-				if (mailer.deleteSync())
+				if (mailer.delete())
 					System.out.println("Account is Deleted");
 
 			}
@@ -317,7 +317,7 @@ public abstract class Command {
 		});
 		cmdMap.put("getattat", new Command("getattat") {
 
-			private String path = "." + File.separator;
+			private String path = new File("").getAbsolutePath();
 
 			@Override
 			public void run(String[] args) throws Exception {
@@ -334,6 +334,7 @@ public abstract class Command {
 					return;
 				}
 
+				System.out.println("download to : " + getPath());
 				for (Message m : msgList) {
 					if (id.equals(m.getId())) {
 						m.getAttachments().forEach(attat -> {
@@ -342,6 +343,8 @@ public abstract class Command {
 						});
 						return;
 					}
+					System.err.println("Unable to find mail id : " + id);
+					System.err.println("Try \"fetch\" and re-check!");
 				}
 			}
 
