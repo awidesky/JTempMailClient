@@ -46,6 +46,7 @@ public abstract class Command {
 			run(args);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.err.flush();
 		}
 	}
 
