@@ -46,6 +46,7 @@ public abstract class Command {
 			run(args);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.err.flush();
 		}
 	}
 
@@ -107,6 +108,7 @@ public abstract class Command {
 					Scanner sc = new Scanner(new File("." + File.separator + "autologin.txt"));
 					email = sc.nextLine();
 					password = sc.nextLine();
+					sc.close();
 				} else if (args.length == 2) {
 					email = args[0];
 					password = args[1];
